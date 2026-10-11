@@ -1,0 +1,12 @@
+{
+  "name": "all-video-downloader-pro",
+  "version": "1.0.0",
+  "description": "Multi-platform video downloader backend",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.21.2"
+  }
+}
