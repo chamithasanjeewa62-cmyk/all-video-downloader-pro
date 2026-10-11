@@ -1,1 +1,50 @@
-
+<!DOCTYPE html><html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ALL VIDEO DOWNLOADER PRO</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#090d18;color:white;font-family:Arial,sans-serif;text-align:center;padding:20px}
+.card{max-width:480px;margin:40px auto;background:#141b2d;padding:25px;border-radius:20px;box-shadow:0 0 25px #00e5ff30}
+h1{color:#00e5ff;font-size:27px}
+p{color:#bdc7da}
+input,button{width:100%;padding:14px;margin-top:12px;border-radius:10px;font-size:16px}
+input{background:#080d18;border:1px solid #00e5ff;color:white}
+button{border:0;background:#00e5ff;color:#06101a;font-weight:bold;cursor:pointer}
+#result{margin-top:20px;overflow-wrap:anywhere}
+.small{font-size:12px;color:#9eabc2}
+</style>
+</head>
+<body>
+<div class="card">
+<h1>⚡ ALL VIDEO<br>DOWNLOADER PRO</h1>
+<p>Paste a video link to identify its platform.</p>
+<input id="videoUrl" type="url" placeholder="Paste video URL here">
+<button onclick="checkLink()">CHECK VIDEO LINK</button>
+<div id="result"></div>
+<p class="small">Only download videos you own or have permission to save.</p>
+</div>
+<script>
+function checkLink(){
+  const input=document.getElementById("videoUrl");
+  const result=document.getElementById("result");
+  try{
+    const url=new URL(input.value.trim());
+    if(!["http:","https:"].includes(url.protocol)) throw new Error();
+    const host=url.hostname.toLowerCase();
+    let platform="Unknown platform";
+    if(host==="facebook.com"||host.endsWith(".facebook.com")||host==="fb.watch") platform="Facebook";
+    else if(host==="tiktok.com"||host.endsWith(".tiktok.com")) platform="TikTok";
+    else if(host==="instagram.com"||host.endsWith(".instagram.com")) platform="Instagram";
+    else if(host==="youtube.com"||host.endsWith(".youtube.com")||host==="youtu.be") platform="YouTube";
+    else if(host==="x.com"||host.endsWith(".x.com")||host==="twitter.com"||host.endsWith(".twitter.com")) platform="X / Twitter";
+    else if(host==="reddit.com"||host.endsWith(".reddit.com")||host==="redd.it") platform="Reddit";
+    result.innerHTML="<h3>✅ "+platform+"</h3><p>Link recognized!</p><p class='small'>This demo identifies links; it does not download the video yet.</p>";
+  }catch(e){
+    result.innerHTML="<p style='color:#ff7070'>Please enter a valid video link.</p>";
+  }
+}
+</script>
+</body>
+  </html>
