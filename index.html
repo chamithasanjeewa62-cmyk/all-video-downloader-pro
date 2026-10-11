@@ -1,310 +1,545 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#080b14">
-<meta name="description" content="ALL VIDEO DOWNLOADER PRO - Video link checker for popular platforms.">
-<title>ALL VIDEO DOWNLOADER PRO</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#09091b">
+<title>All Video Downloader Pro</title>
+
 <style>
-:root {
-  --bg: #080b14;
-  --panel: #101727;
-  --blue: #00e5ff;
-  --purple: #8b5cf6;
-  --text: #f4f7ff;
-  --muted: #91a0b9;
-  --border: rgba(0,229,255,.2);
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
-* { box-sizing: border-box; }
+
 body {
-  margin: 0;
-  min-height: 100vh;
-  color: var(--text);
-  background:
-    radial-gradient(ellipse at 50% 0%, #102a45 0%, transparent 48%),
-    var(--bg);
-  font-family: Arial, Helvetica, sans-serif;
+    background: #09091b;
+    color: #fff;
+    font-family: Arial, sans-serif;
+    min-height: 100vh;
 }
+
+.glow {
+    position: fixed;
+    width: 240px;
+    height: 240px;
+    border-radius: 50%;
+    filter: blur(100px);
+    opacity: .3;
+    pointer-events: none;
+    z-index: -1;
+    animation: float 7s infinite alternate;
+}
+
+.purple {
+    background: #792cff;
+    top: 5%;
+    left: -100px;
+}
+
+.blue {
+    background: #00bfff;
+    right: -100px;
+    bottom: 5%;
+}
+
+@keyframes float {
+    from { transform: translateY(-20px); }
+    to { transform: translateY(60px); }
+}
+
 header {
-  height: 75px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 6%;
-  border-bottom: 1px solid rgba(255,255,255,.07);
-  background: rgba(8,11,20,.8);
+    padding: 22px 18px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    max-width: 600px;
+    margin: auto;
 }
-.brand {
-  font-weight: 900;
-  letter-spacing: 1px;
-  font-size: 16px;
+
+.logo {
+    height: 48px;
+    width: 48px;
+    display: grid;
+    place-items: center;
+    border-radius: 15px;
+    font-size: 25px;
+    background: linear-gradient(135deg, #853bff, #00caff);
+    box-shadow: 0 0 25px #713bff55;
 }
-.brand span { color: var(--blue); }
-.status {
-  color: #61f7b0;
-  font-size: 11px;
-  border: 1px solid #245b49;
-  background: #10271f;
-  padding: 8px 10px;
-  border-radius: 30px;
+
+header h1 {
+    font-size: 17px;
 }
+
+header p {
+    font-size: 10px;
+    color: #aaaacb;
+    letter-spacing: 3px;
+    margin-top: 5px;
+}
+
 main {
-  max-width: 850px;
-  margin: auto;
-  padding: 65px 18px 45px;
-  text-align: center;
+    width: 100%;
+    max-width: 520px;
+    padding: 10px 17px 35px;
+    margin: auto;
 }
-.badge {
-  display: inline-block;
-  color: var(--blue);
-  border: 1px solid var(--border);
-  background: rgba(0,229,255,.06);
-  border-radius: 30px;
-  padding: 9px 14px;
-  font-size: 11px;
-  letter-spacing: 2px;
+
+.hero {
+    text-align: center;
+    padding: 27px 0;
+    animation: appear .7s ease;
 }
-h1 {
-  font-size: clamp(34px, 7vw, 60px);
-  line-height: 1.1;
-  margin: 25px 0 16px;
-  font-weight: 900;
-  letter-spacing: -1.5px;
+
+@keyframes appear {
+    from { opacity: 0; transform: translateY(15px); }
+    to { opacity: 1; transform: translateY(0); }
 }
-h1 span {
-  color: var(--blue);
-  text-shadow: 0 0 30px rgba(0,229,255,.35);
+
+.hero h2 {
+    font-size: 33px;
+    line-height: 1.25;
 }
-.subtitle {
-  color: var(--muted);
-  max-width: 510px;
-  margin: 0 auto;
-  line-height: 1.7;
-  font-size: 15px;
+
+.hero h2 span {
+    background: linear-gradient(90deg, #b38aff, #00d5ff);
+    color: transparent;
+    -webkit-background-clip: text;
+    background-clip: text;
 }
-.card {
-  max-width: 660px;
-  margin: 36px auto 0;
-  padding: 25px;
-  border: 1px solid var(--border);
-  border-radius: 22px;
-  background: linear-gradient(145deg, rgba(20,31,51,.97), rgba(12,18,32,.97));
-  box-shadow: 0 15px 60px rgba(0,0,0,.3), 0 0 30px rgba(0,229,255,.05);
-  text-align: left;
+
+.hero p {
+    color: #aaaac5;
+    font-size: 13px;
+    line-height: 1.7;
+    margin-top: 12px;
 }
-.label {
-  font-size: 12px;
-  color: #c4d0e6;
-  display: block;
-  margin-bottom: 12px;
-}
-.input-wrap {
-  display: flex;
-  gap: 8px;
-}
-input {
-  width: 100%;
-  min-width: 0;
-  padding: 16px 13px;
-  border: 1px solid #293a53;
-  border-radius: 12px;
-  background: #080e1a;
-  color: white;
-  font-size: 14px;
-  outline: none;
-}
-input:focus {
-  border-color: var(--blue);
-  box-shadow: 0 0 0 3px rgba(0,229,255,.08);
-}
-button {
-  cursor: pointer;
-  font-weight: bold;
-  border: 0;
-  border-radius: 12px;
-  transition: .2s;
-}
-.paste {
-  min-width: 82px;
-  color: var(--blue);
-  background: rgba(0,229,255,.1);
-  border: 1px solid var(--border);
-  padding: 0 12px;
-}
-.paste:hover { background: rgba(0,229,255,.2); }
-.check {
-  width: 100%;
-  margin-top: 13px;
-  padding: 16px;
-  color: #051019;
-  background: linear-gradient(100deg, var(--blue), #56b8ff);
-  font-size: 14px;
-  box-shadow: 0 5px 25px rgba(0,229,255,.15);
-}
-.check:hover { transform: translateY(-2px); }
-.result {
-  display: none;
-  margin-top: 18px;
-  padding: 16px;
-  border: 1px solid var(--border);
-  background: #0a1422;
-  border-radius: 13px;
-  overflow-wrap: anywhere;
-}
-.result h3 { margin: 0 0 8px; color: var(--blue); }
-.result p { margin: 6px 0; color: var(--muted); font-size: 13px; line-height: 1.6; }
-.platform-title {
-  margin: 42px 0 18px;
-  font-size: 13px;
-  letter-spacing: 2px;
-  color: #b7c6df;
-}
+
 .platforms {
-  display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  gap: 10px;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 10px 0 24px;
 }
+
 .platform {
-  padding: 17px 5px;
-  border: 1px solid rgba(255,255,255,.08);
-  border-radius: 13px;
-  background: rgba(18,27,44,.7);
-  color: #dce6f8;
-  font-size: 11px;
+    padding: 9px 12px;
+    border: 1px solid #ffffff19;
+    background: #ffffff08;
+    border-radius: 12px;
+    font-size: 12px;
+    color: #d7d7ee;
 }
-.platform .icon {
-  font-size: 23px;
-  display: block;
-  margin-bottom: 9px;
+
+.card {
+    background: linear-gradient(145deg, #19192f, #111121);
+    border: 1px solid #ffffff18;
+    padding: 19px;
+    border-radius: 20px;
+    margin-bottom: 17px;
+    box-shadow: 0 10px 35px #0003;
 }
-.info {
-  max-width: 660px;
-  margin: 24px auto 0;
-  padding: 16px;
-  border-radius: 13px;
-  background: rgba(139,92,246,.07);
-  border: 1px solid rgba(139,92,246,.2);
-  color: #b9b6d8;
-  font-size: 12px;
-  line-height: 1.7;
+
+.card h3 {
+    font-size: 15px;
+    margin-bottom: 15px;
 }
+
+.inputbox {
+    display: flex;
+    align-items: center;
+    border: 1px solid #45416a;
+    background: #09091b;
+    border-radius: 12px;
+    padding: 5px;
+}
+
+.inputbox:focus-within {
+    border-color: #9361ff;
+    box-shadow: 0 0 15px #713bff30;
+}
+
+input {
+    min-width: 0;
+    flex: 1;
+    padding: 12px 8px;
+    border: 0;
+    outline: 0;
+    background: transparent;
+    color: white;
+    font-size: 13px;
+}
+
+input::placeholder {
+    color: #777792;
+}
+
+button, .download {
+    cursor: pointer;
+    font-family: inherit;
+}
+
+.paste {
+    background: #292342;
+    color: #d6c7ff;
+    border: 0;
+    padding: 10px;
+    border-radius: 9px;
+}
+
+.primary {
+    display: block;
+    width: 100%;
+    margin-top: 13px;
+    padding: 15px;
+    border: 0;
+    border-radius: 12px;
+    background: linear-gradient(100deg, #813cff, #168fff);
+    color: white;
+    font-weight: bold;
+    font-size: 14px;
+    box-shadow: 0 5px 22px #713bff30;
+    transition: transform .2s;
+}
+
+.primary:active {
+    transform: scale(.97);
+}
+
+.status {
+    margin-top: 13px;
+    text-align: center;
+    color: #b5b5d0;
+    font-size: 12px;
+    line-height: 1.7;
+    overflow-wrap: anywhere;
+}
+
+.qualities {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.quality {
+    border: 1px solid #383651;
+    border-radius: 12px;
+    padding: 13px 10px;
+    background: #ffffff05;
+    color: white;
+    text-align: left;
+}
+
+.quality strong {
+    display: block;
+    font-size: 15px;
+}
+
+.quality small {
+    display: block;
+    margin-top: 5px;
+    font-size: 11px;
+    color: #9d9db8;
+}
+
+.quality.active {
+    border-color: #9361ff;
+    background: #713bff20;
+}
+
+.note {
+    font-size: 11px;
+    color: #9999b4;
+    line-height: 1.7;
+    margin-top: 13px;
+}
+
+#previewCard {
+    display: none;
+}
+
+video {
+    width: 100%;
+    border-radius: 12px;
+    background: black;
+}
+
+.download {
+    display: block;
+    text-align: center;
+    text-decoration: none;
+    padding: 14px;
+    border-radius: 12px;
+    margin-top: 13px;
+    color: white;
+    background: linear-gradient(100deg, #713bff, #078bff);
+    font-weight: bold;
+}
+
 footer {
-  text-align: center;
-  padding: 28px 15px;
-  color: #65738c;
-  font-size: 11px;
-  border-top: 1px solid rgba(255,255,255,.06);
-}
-footer span { color: var(--blue); }
-@media(max-width:550px) {
-  header { padding: 0 16px; height: 65px; }
-  .brand { font-size: 13px; }
-  main { padding-top: 45px; }
-  .card { padding: 17px; margin-top: 28px; }
-  .platforms { grid-template-columns: repeat(3, 1fr); }
-  .input-wrap { flex-direction: column; }
-  .paste { padding: 13px; }
+    text-align: center;
+    color: #777791;
+    font-size: 11px;
+    padding: 15px;
 }
 </style>
 </head>
+
 <body>
+
+<div class="glow purple"></div>
+<div class="glow blue"></div>
+
 <header>
-  <div class="brand">⚡ ALL VIDEO <span>PRO</span></div>
-  <div class="status">● WEBSITE ONLINE</div>
-</header><main>
-  <div class="badge">✦ SMART VIDEO LINK CHECKER</div>
-  <h1>ALL VIDEO<br><span>DOWNLOADER PRO</span></h1>
-  <p class="subtitle">
-    Your video link checker. Paste a supported platform link below
-    to identify where it comes from.
-  </p>  <section class="card">
-    <label class="label" for="videoUrl">PASTE YOUR VIDEO LINK</label>
-    <div class="input-wrap">
-      <input id="videoUrl" type="url" placeholder="https://example.com/video..." autocomplete="url">
-      <button class="paste" id="pasteBtn" type="button">📋 PASTE</button>
+    <div class="logo">▶</div>
+    <div>
+        <h1>ALL VIDEO DOWNLOADER</h1>
+        <p>PRO EDITION</p>
     </div>
-    <button class="check" id="checkBtn" type="button">⚡ CHECK VIDEO LINK</button>
-    <div class="result" id="result" aria-live="polite"></div>
-  </section>  <div class="platform-title">SUPPORTED LINK PLATFORMS</div>
-  <div class="platforms">
-    <div class="platform"><span class="icon">📘</span>Facebook</div>
-    <div class="platform"><span class="icon">🎵</span>TikTok</div>
-    <div class="platform"><span class="icon">📸</span>Instagram</div>
-    <div class="platform"><span class="icon">▶️</span>YouTube</div>
-    <div class="platform"><span class="icon">𝕏</span>X / Twitter</div>
-    <div class="platform"><span class="icon">👽</span>Reddit</div>
-  </div>  <div class="info">
-    <strong>ℹ️ Please note:</strong> This version identifies video links only.
-    It does not fetch or download videos from these platforms yet.
-    Only save videos you own or have permission to download.
-  </div>
-</main><footer>
-  <span>ALL VIDEO DOWNLOADER PRO</span> · Made for video link checking
-</footer><script>
-const input = document.getElementById("videoUrl");
-const result = document.getElementById("result");
+</header>
 
-document.getElementById("pasteBtn").addEventListener("click", async () => {
-  try {
-    const text = await navigator.clipboard.readText();
-    if (!text) {
-      alert("Your clipboard is empty. Copy a video link first.");
-      return;
+<main>
+
+<section class="hero">
+    <h2>Download Videos.<br><span>Your Way.</span></h2>
+    <p>Paste a video link and check your options<br>
+    in one simple place.</p>
+</section>
+
+<div class="platforms">
+    <div class="platform">▶ YouTube</div>
+    <div class="platform">♪ TikTok</div>
+    <div class="platform">f Facebook</div>
+    <div class="platform">◎ Instagram</div>
+    <div class="platform">𝕏 X</div>
+    <div class="platform">◉ Reddit</div>
+</div>
+
+<section class="card">
+    <h3>🔗 Paste Video Link</h3>
+
+    <div class="inputbox">
+        <input id="url" type="url"
+               placeholder="Paste video link here..."
+               autocomplete="url">
+        <button class="paste" id="paste">Paste</button>
+    </div>
+
+    <button class="primary" id="check">✨ CHECK VIDEO</button>
+    <div class="status" id="status" aria-live="polite">
+        Paste a public video link to get started.
+    </div>
+</section>
+
+<section class="card">
+    <h3>🎬 Preferred Video Quality</h3>
+
+    <div class="qualities">
+        <button class="quality" data-quality="360p">
+            <strong>360p</strong><small>Standard</small>
+        </button>
+        <button class="quality" data-quality="480p">
+            <strong>480p</strong><small>Good</small>
+        </button>
+        <button class="quality active" data-quality="720p">
+            <strong>720p HD</strong><small>High definition</small>
+        </button>
+        <button class="quality" data-quality="1080p">
+            <strong>1080p FHD</strong><small>Full HD</small>
+        </button>
+        <button class="quality" data-quality="4K">
+            <strong>4K UHD</strong><small>Ultra HD</small>
+        </button>
+    </div>
+
+    <p class="note">
+        These are preferred quality settings, not confirmed
+        formats. Actual resolutions depend on the video source.
+    </p>
+</section>
+
+<section class="card" id="previewCard">
+    <h3>🎥 Video Preview</h3>
+    <video id="player" controls playsinline></video>
+    <div class="status" id="resolution"></div>
+    <a id="download" class="download" href="#" download>
+        ⬇️ Download Video
+    </a>
+</section>
+
+<section class="card">
+    <h3>📥 Download Center</h3>
+    <div class="status" id="downloadStatus">
+        Your video status will appear here.
+    </div>
+</section>
+
+</main>
+
+<footer>ALL VIDEO DOWNLOADER PRO</footer>
+
+<script>
+"use strict";
+
+const urlInput = document.getElementById("url");
+const statusBox = document.getElementById("status");
+const checkButton = document.getElementById("check");
+const previewCard = document.getElementById("previewCard");
+const player = document.getElementById("player");
+const resolution = document.getElementById("resolution");
+const downloadLink = document.getElementById("download");
+const downloadStatus = document.getElementById("downloadStatus");
+
+let selectedQuality = "720p";
+
+document.getElementById("paste").addEventListener("click", async () => {
+    try {
+        const text = await navigator.clipboard.readText();
+
+        if (!text) {
+            statusBox.textContent = "Clipboard is empty.";
+            return;
+        }
+
+        urlInput.value = text.trim();
+        statusBox.textContent = "Link pasted. Press CHECK VIDEO.";
+    } catch (error) {
+        statusBox.textContent =
+            "Clipboard permission unavailable. Long-press the input box and tap Paste.";
     }
-    input.value = text.trim();
-    result.style.display = "block";
-    result.innerHTML = "<p>✅ Link pasted. Tap CHECK VIDEO LINK.</p>";
-  } catch {
-    input.focus();
-    alert("Clipboard access is blocked by your browser. Long-press the box and choose Paste.");
-  }
 });
 
-document.getElementById("checkBtn").addEventListener("click", () => {
-  const value = input.value.trim();
-  result.style.display = "block";
+document.querySelectorAll(".quality").forEach(button => {
+    button.addEventListener("click", () => {
+        document.querySelectorAll(".quality").forEach(item => {
+            item.classList.remove("active");
+        });
 
-  if (!value) {
-    result.innerHTML = "<p style='color:#ff8e9b'>Please paste a video link first.</p>";
-    return;
-  }
+        button.classList.add("active");
+        selectedQuality = button.dataset.quality;
 
-  let url;
-  try {
-    url = new URL(value);
-    if (!["https:", "http:"].includes(url.protocol)) throw new Error();
-  } catch {
-    result.innerHTML = "<p style='color:#ff8e9b'>Please enter a valid link beginning with https://</p>";
-    return;
-  }
-
-  const host = url.hostname.toLowerCase();
-  let platform = "Unknown platform";
-
-  if (host === "facebook.com" || host.endsWith(".facebook.com") || host === "fb.watch") {
-    platform = "Facebook";
-  } else if (host === "tiktok.com" || host.endsWith(".tiktok.com")) {
-    platform = "TikTok";
-  } else if (host === "instagram.com" || host.endsWith(".instagram.com")) {
-    platform = "Instagram";
-  } else if (host === "youtube.com" || host.endsWith(".youtube.com") || host === "youtu.be") {
-    platform = "YouTube";
-  } else if (host === "x.com" || host.endsWith(".x.com") || host === "twitter.com" || host.endsWith(".twitter.com")) {
-    platform = "X / Twitter";
-  } else if (host === "reddit.com" || host.endsWith(".reddit.com") || host === "redd.it") {
-    platform = "Reddit";
-  }
-
-  result.innerHTML =
-    "<h3>✓ " + platform + " link recognized</h3>" +
-    "<p>Your link: " + escapeText(url.href) + "</p>" +
-    "<p>This demo checks the platform only. Actual video downloading is not connected yet.</p>";
+        downloadStatus.textContent =
+            "Preferred quality: " + selectedQuality +
+            ". Actual available quality has not been checked yet.";
+    });
 });
 
-function escapeText(text) {
-  const div = document.createElement("div");
-  div.textContent = text;
-  return div.innerHTML;
+function identifyPlatform(host) {
+    if (host === "tiktok.com" || host.endsWith(".tiktok.com")) {
+        return "TikTok";
+    }
+
+    if (host === "facebook.com" || host.endsWith(".facebook.com") ||
+        host === "fb.watch") {
+        return "Facebook";
+    }
+
+    if (host === "instagram.com" || host.endsWith(".instagram.com")) {
+        return "Instagram";
+    }
+
+    if (host === "youtube.com" || host.endsWith(".youtube.com") ||
+        host === "youtu.be") {
+        return "YouTube";
+    }
+
+    if (host === "x.com" || host.endsWith(".x.com") ||
+        host === "twitter.com" || host.endsWith(".twitter.com")) {
+        return "X / Twitter";
+    }
+
+    if (host === "reddit.com" || host.endsWith(".reddit.com")) {
+        return "Reddit";
+    }
+
+    return "Other website";
 }
-</script></body>
-                </html>
+
+checkButton.addEventListener("click", () => {
+    const raw = urlInput.value.trim();
+
+    previewCard.style.display = "none";
+    player.pause();
+    player.removeAttribute("src");
+    player.load();
+
+    if (!raw) {
+        statusBox.textContent = "⚠️ Paste a video link first.";
+        urlInput.focus();
+        return;
+    }
+
+    let parsed;
+
+    try {
+        parsed = new URL(raw);
+    } catch (error) {
+        statusBox.textContent = "⚠️ Invalid URL. Check the link and try again.";
+        return;
+    }
+
+    if (parsed.protocol !== "https:" && parsed.protocol !== "http:") {
+        statusBox.textContent = "⚠️ Please enter an HTTP or HTTPS link.";
+        return;
+    }
+
+    const host = parsed.hostname.toLowerCase().replace(/\.$/, "");
+    const platform = identifyPlatform(host);
+
+    statusBox.textContent =
+        "✓ Link format is valid. Platform: " + platform + ".";
+
+    downloadStatus.textContent =
+        "Selected quality: " + selectedQuality +
+        ". A compatible video source is required to retrieve actual formats.";
+
+    /*
+      A social media page URL is not usually a direct video file.
+      Only try browser playback when the URL looks like a direct
+      MP4/WebM file. Server permissions may still prevent playback.
+    */
+
+    const path = parsed.pathname.toLowerCase();
+    const isDirectVideo = /\.(mp4|webm|ogv|mov)$/.test(path);
+
+    if (!isDirectVideo) {
+        statusBox.textContent +=
+            " This is a page link, not a direct video file.";
+        downloadStatus.textContent =
+            platform + " link detected. To retrieve the actual video " +
+            "and available qualities, connect a compatible backend service.";
+        return;
+    }
+
+    previewCard.style.display = "block";
+    player.src = parsed.href;
+    downloadLink.href = parsed.href;
+
+    resolution.textContent =
+        "Loading video information…";
+
+    player.onloadedmetadata = () => {
+        resolution.textContent =
+            "Actual resolution: " + player.videoWidth +
+            " × " + player.videoHeight;
+    };
+
+    player.onerror = () => {
+        resolution.textContent =
+            "Preview unavailable. The server may block playback or require access.";
+    };
+
+    player.load();
+
+    previewCard.scrollIntoView({
+        behavior: "smooth",
+        block: "center"
+    });
+});
+</script>
+
+</body>
+  </html>
