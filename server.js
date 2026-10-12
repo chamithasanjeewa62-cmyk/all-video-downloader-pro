@@ -6,13 +6,13 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json({ limit: "10kb" }));
 
 // CORS configuration
+const allowedOrigins = [
+  "https://chamithasanjeewa62-cmyk.github.io",
+  "https://all-video-downloader-pro.vercel.app"
+];
+
 app.use((req, res, next) => {
   const origin = req.headers.origin;
-
-  const allowedOrigins = [
-    "https://chamithasanjeewa62-cmyk.github.io",
-    "https://all-video-downloader-pro.vercel.app"
-  ];
 
   if (origin && allowedOrigins.includes(origin)) {
     res.setHeader("Access-Control-Allow-Origin", origin);
@@ -42,7 +42,7 @@ const platforms = {
   "reddit.com": "Reddit"
 };
 
-// Identify platform from hostname
+// Identify platform
 function identifyPlatform(host) {
   for (const [domain, name] of Object.entries(platforms)) {
     if (host === domain || host.endsWith("." + domain)) {
@@ -62,7 +62,7 @@ app.get("/", (req, res) => {
       "Link validation",
       "Platform detection",
       "Direct video link detection",
-      "Quality selection input",
+      "Quality selection",
       "CORS enabled"
     ]
   });
@@ -75,7 +75,7 @@ app.post("/api/check-link", (req, res) => {
   if (typeof url !== "string" || !url.trim()) {
     return res.status(400).json({
       success: false,
-      message: "Please provide a video URL."
+      message: "Please enter a video URL."
     });
   }
 
@@ -86,20 +86,36 @@ app.post("/api/check-link", (req, res) => {
   } catch {
     return res.status(400).json({
       success: false,
-      message: "Invalid URL."
+      message: "Invalid URL. Please check the link."
     });
   }
 
   if (!["http:", "https:"].includes(parsed.protocol)) {
     return res.status(400).json({
       success: false,
-      message: "Only HTTP and HTTPS links are accepted."
+      message: "Only HTTP and HTTPS links are supported."
     });
   }
 
-  const host = parsed.hostname
-    .toLowerCase()
-    .replace(/^www\./, "");
+  const host = parsed.hostname.toLowerCase().replace(/^www\./, "");
+
+  // Block local and private network hostnames
+  const blockedHosts = [
+    "localhost",
+    "127.0.0.1",
+    "::1"
+  ];
+
+  if (
+    blockedHosts.includes(host) ||
+    host.endsWith(".local") ||
+    host.endsWith(".internal")
+  ) {
+    return res.status(400).json({
+      success: false,
+      message: "This hostname is not allowed."
+    });
+  }
 
   const platform = identifyPlatform(host);
 
@@ -114,12 +130,12 @@ app.post("/api/check-link", (req, res) => {
   if (!allowedQualities.includes(quality)) {
     return res.status(400).json({
       success: false,
-      message: "Unsupported quality selection."
+      message: "Please select a supported video quality."
     });
   }
 
-  // Detect direct video file links
-  const directVideo = /\.(mp4|webm|ogv|mov)$/i.test(
+  // Direct video file detection
+  const directVideo = /\.(mp4|webm|ogv|mov|m4v)$/i.test(
     parsed.pathname
   );
 
@@ -129,12 +145,13 @@ app.post("/api/check-link", (req, res) => {
       type: "direct-video",
       platform: platform || "Direct video source",
       selectedQuality: quality,
+      videoUrl: parsed.href,
+      downloadAvailable: true,
       message:
-        "Direct video link detected. Playback and downloading depend on source access."
+        "Direct video link detected. Use the video URL to open or download the file if the source permits it."
     });
   }
 
-  // Reject unsupported platforms
   if (!platform) {
     return res.status(400).json({
       success: false,
@@ -142,18 +159,30 @@ app.post("/api/check-link", (req, res) => {
     });
   }
 
-  // Recognized platform
+  // Recognized social media link
   return res.json({
     success: true,
     type: "page-link",
     platform,
     selectedQuality: quality,
+    downloadAvailable: false,
     message:
-      "Link recognized. A compatible, authorized video service is required to retrieve video formats and download URLs."
+      platform +
+      " link recognized. A compatible, authorized video service is needed to retrieve the actual video file."
+  });
+});
+
+// Handle invalid JSON and other errors
+app.use((err, req, res, next) => {
+  console.error(err.message);
+
+  res.status(400).json({
+    success: false,
+    message: "The request could not be processed."
   });
 });
 
 // Start server
 app.listen(PORT, "0.0.0.0", () => {
-  console.log(`Server running on port ${PORT}`);
+  console.log(`ALL VIDEO DOWNLOADER PRO running on port ${PORT}`);
 });
