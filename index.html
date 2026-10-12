@@ -1,9 +1,12 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#09091b">
-<title>ALL VIDEO DOWNLOADER PRO</title><style>
+<title>ALL VIDEO DOWNLOADER PRO</title>
+
+<style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{background:#09091b;color:#fff;font-family:Arial,sans-serif;min-height:100vh}
 .glow{position:fixed;width:240px;height:240px;border-radius:50%;filter:blur(100px);opacity:.3;pointer-events:none;z-index:-1}
@@ -38,177 +41,245 @@ button:disabled{opacity:.6;cursor:wait}
 .quality.active{border-color:#9361ff;background:#713bff20}
 .note{font-size:11px;color:#9999b4;line-height:1.7;margin-top:13px}
 #previewCard{display:none}
-video{width:100%;border-radius:12px;background:#000}
-.download{display:block;text-align:center;text-decoration:none;padding:14px;border-radius:12px;margin-top:13px;color:white;background:linear-gradient(100deg,#713bff,#078bff);font-weight:bold}
-footer{text-align:center;color:#777791;font-size:11px;padding:15px}
-</style></head><body>
+video{width:100%;border-radius:12px;background:#000;max-height:360px}
+.download{display:block;text-align:center;text-decoration:none;padding:14px;border-radius:12px;margin-top:13px;color:white;background:linear-gradient(100deg,#713bff,#078bff);font-weight:bold;border:0;width:100%}
+.download:disabled{opacity:.5}
+footer{text-align:center;color:#777791;font-size:11px;padding:15px;line-height:1.8}
+</style>
+</head>
+
+<body>
 <div class="glow purple"></div>
-<div class="glow blue"></div><header>
+<div class="glow blue"></div>
+
+<header>
   <div class="logo">▶</div>
   <div>
     <h1>ALL VIDEO DOWNLOADER</h1>
     <p>PRO EDITION</p>
   </div>
-</header><main>
+</header>
+
+<main>
 <section class="hero">
   <h2>Download Videos.<br><span>Your Way.</span></h2>
   <p>Paste a video link and check your options<br>in one simple place.</p>
-</section><div class="platforms">
+</section>
+
+<div class="platforms">
   <div class="platform">▶ YouTube</div>
   <div class="platform">♪ TikTok</div>
   <div class="platform">f Facebook</div>
   <div class="platform">◎ Instagram</div>
   <div class="platform">𝕏 X</div>
   <div class="platform">◉ Reddit</div>
-</div><section class="card">
+</div>
+
+<section class="card">
   <h3>🔗 Paste Video Link</h3>
   <div class="inputbox">
     <input id="url" type="url" placeholder="Paste video link here..." autocomplete="url">
     <button class="paste" id="paste" type="button">Paste</button>
   </div>
-  <button class="primary" id="check" type="button">✨ CHECK VIDEO</button>
-  <div class="status" id="status" aria-live="polite">Paste a video link to get started.</div>
-</section><section class="card">
-  <h3>🎬 Preferred Video Quality</h3>
-  <div class="qualities">
-    <button class="quality" data-quality="360p" type="button"><strong>360p</strong><small>Standard</small></button>
-    <button class="quality" data-quality="480p" type="button"><strong>480p</strong><small>Good</small></button>
-    <button class="quality active" data-quality="720p" type="button"><strong>720p HD</strong><small>High definition</small></button>
-    <button class="quality" data-quality="1080p" type="button"><strong>1080p FHD</strong><small>Full HD</small></button>
-    <button class="quality" data-quality="4K" type="button"><strong>4K UHD</strong><small>Ultra HD</small></button>
-  </div>
-  <p class="note">Selected quality is a preference only. Actual available resolutions depend on the video source.</p>
-</section><section class="card" id="previewCard">
-  <h3>🎥 Video Preview</h3>
-  <video id="player" controls playsinline></video>
-  <div class="status" id="resolution"></div>
-  <a id="download" class="download" href="#" download>⬇️ Download Video</a>
-</section><section class="card">
-  <h3>📥 Download Center</h3>
-  <div class="status" id="downloadStatus">Your video status will appear here.</div>
-</section>
-</main><footer>ALL VIDEO DOWNLOADER PRO</footer><script>
-"use strict";
 
-/*
-  This must be your deployed backend URL.
-  The current Vercel project is configured as the backend.
-*/
+  <button class="primary" id="check" type="button">CHECK VIDEO LINK</button>
+  <div class="status" id="status" role="status" aria-live="polite">
+    Paste a link to get started.
+  </div>
+
+  <p class="note">
+    Only download videos you own or have permission to save.
+    Social-media links may need a compatible authorized service.
+  </p>
+</section>
+
+<section class="card">
+  <h3>🎬 Select Video Quality</h3>
+  <div class="qualities">
+    <button class="quality" data-quality="360p" type="button">
+      <strong>360p</strong><small>Low quality</small>
+    </button>
+    <button class="quality" data-quality="480p" type="button">
+      <strong>480p</strong><small>Standard quality</small>
+    </button>
+    <button class="quality active" data-quality="720p" type="button">
+      <strong>720p HD</strong><small>Recommended</small>
+    </button>
+    <button class="quality" data-quality="1080p" type="button">
+      <strong>1080p</strong><small>Full HD</small>
+    </button>
+    <button class="quality" data-quality="4K" type="button">
+      <strong>4K</strong><small>Ultra HD</small>
+    </button>
+  </div>
+  <p class="note">
+    Quality selection is a preference. The actual quality depends on
+    the source video and available formats.
+  </p>
+</section>
+
+<section class="card" id="previewCard">
+  <h3>🎥 Video Preview</h3>
+  <video id="preview" controls playsinline preload="metadata"></video>
+  <p class="status" id="previewStatus"></p>
+  <a class="download" id="download" href="#" target="_blank" rel="noopener">
+    ⬇ OPEN VIDEO
+  </a>
+  <p class="note">
+    Some servers prevent direct downloads. In that case, the video may
+    open in your browser instead. This button does not extract videos
+    from Facebook or TikTok pages.
+  </p>
+</section>
+</main>
+
+<footer>
+  ALL VIDEO DOWNLOADER PRO<br>
+  Use responsibly and respect creators' rights.
+</footer>
+
+<script>
 const API_BASE = "https://all-video-downloader-pro.vercel.app";
 
 const urlInput = document.getElementById("url");
-const statusBox = document.getElementById("status");
+const pasteButton = document.getElementById("paste");
 const checkButton = document.getElementById("check");
+const statusBox = document.getElementById("status");
 const previewCard = document.getElementById("previewCard");
-const player = document.getElementById("player");
-const resolution = document.getElementById("resolution");
-const downloadLink = document.getElementById("download");
-const downloadStatus = document.getElementById("downloadStatus");
+const preview = document.getElementById("preview");
+const previewStatus = document.getElementById("previewStatus");
+const downloadButton = document.getElementById("download");
 
 let selectedQuality = "720p";
+let currentObjectURL = null;
 
-document.getElementById("paste").addEventListener("click", async () => {
+const videoExtensions = /\.(mp4|webm|ogv|mov|m4v)$/i;
+
+document.querySelectorAll(".quality").forEach(button => {
+  button.addEventListener("click", () => {
+    document.querySelectorAll(".quality").forEach(item => {
+      item.classList.remove("active");
+    });
+
+    button.classList.add("active");
+    selectedQuality = button.dataset.quality;
+  });
+});
+
+pasteButton.addEventListener("click", async () => {
   try {
     const text = await navigator.clipboard.readText();
 
     if (!text) {
-      statusBox.textContent = "Clipboard is empty. Copy a link first.";
+      statusBox.textContent = "Your clipboard is empty.";
       return;
     }
 
     urlInput.value = text.trim();
-    statusBox.textContent = "Link pasted. Press CHECK VIDEO.";
+    statusBox.textContent = "Link pasted. Tap CHECK VIDEO LINK.";
   } catch {
     statusBox.textContent =
-      "Clipboard permission unavailable. Long-press the box and choose Paste.";
+      "Clipboard access was blocked. Long-press the box and choose Paste.";
+    urlInput.focus();
   }
 });
 
-document.querySelectorAll(".quality").forEach(button => {
-  button.addEventListener("click", () => {
-    document.querySelectorAll(".quality").forEach(item =>
-      item.classList.remove("active")
-    );
+function getPlatform(host) {
+  const platforms = {
+    "facebook.com": "Facebook",
+    "fb.watch": "Facebook",
+    "tiktok.com": "TikTok",
+    "instagram.com": "Instagram",
+    "youtube.com": "YouTube",
+    "youtu.be": "YouTube",
+    "x.com": "X",
+    "twitter.com": "X",
+    "reddit.com": "Reddit"
+  };
 
-    button.classList.add("active");
-    selectedQuality = button.dataset.quality;
-
-    downloadStatus.textContent =
-      "Selected quality: " + selectedQuality +
-      ". Actual available formats must be provided by the video source.";
-  });
-});
-
-function identifyPlatform(host) {
-  const domains = [
-    ["facebook.com", "Facebook"],
-    ["fb.watch", "Facebook"],
-    ["tiktok.com", "TikTok"],
-    ["instagram.com", "Instagram"],
-    ["youtube.com", "YouTube"],
-    ["youtu.be", "YouTube"],
-    ["x.com", "X"],
-    ["twitter.com", "X"],
-    ["reddit.com", "Reddit"]
-  ];
-
-  for (const [domain, name] of domains) {
+  for (const domain in platforms) {
     if (host === domain || host.endsWith("." + domain)) {
-      return name;
+      return platforms[domain];
     }
   }
 
   return null;
 }
 
+function showDirectVideo(parsedURL) {
+  previewCard.style.display = "block";
+  previewStatus.textContent = "Loading video preview...";
+
+  preview.pause();
+  preview.removeAttribute("src");
+  preview.load();
+
+  preview.src = parsedURL.href;
+  preview.load();
+
+  downloadButton.href = parsedURL.href;
+  downloadButton.textContent = "⬇ DOWNLOAD VIDEO";
+
+  // The browser may ignore the download attribute for cross-origin URLs.
+  downloadButton.setAttribute("download", "video");
+
+  preview.onerror = () => {
+    previewStatus.textContent =
+      "Preview unavailable. The source may block browser playback or require access permission.";
+  };
+
+  preview.onloadedmetadata = () => {
+    previewStatus.textContent =
+      "Video source opened. Available quality depends on the original file.";
+  };
+}
+
 function clearPreview() {
   previewCard.style.display = "none";
-  player.pause();
-  player.removeAttribute("src");
-  player.load();
-  downloadLink.removeAttribute("href");
+  preview.pause();
+  preview.removeAttribute("src");
+  preview.load();
+  downloadButton.removeAttribute("href");
 }
 
 checkButton.addEventListener("click", async () => {
-  const raw = urlInput.value.trim();
+  const rawURL = urlInput.value.trim();
 
-  clearPreview();
-
-  if (!raw) {
-    statusBox.textContent = "⚠️ Paste a video link first.";
-    urlInput.focus();
+  if (!rawURL) {
+    statusBox.textContent = "Please paste a video link first.";
     return;
   }
 
-  let parsed;
+  let parsedURL;
 
   try {
-    parsed = new URL(raw);
+    parsedURL = new URL(rawURL);
   } catch {
-    statusBox.textContent = "⚠️ Invalid URL. Check the link and try again.";
+    statusBox.textContent = "Please enter a valid URL starting with https://";
     return;
   }
 
-  if (!["http:", "https:"].includes(parsed.protocol)) {
-    statusBox.textContent = "⚠️ Please enter an HTTP or HTTPS link.";
+  if (!["http:", "https:"].includes(parsedURL.protocol)) {
+    statusBox.textContent = "Only HTTP and HTTPS links are supported.";
     return;
   }
-
-  const host = parsed.hostname.toLowerCase().replace(/^www\./, "");
-  const platform = identifyPlatform(host);
-  const directVideo = /\.(mp4|webm|ogv|mov)$/i.test(parsed.pathname);
 
   checkButton.disabled = true;
-  checkButton.textContent = "⏳ CHECKING...";
-  statusBox.textContent = "Checking link with the server...";
-  downloadStatus.textContent = "Contacting backend...";
+  checkButton.textContent = "CHECKING...";
+  clearPreview();
+
+  const host = parsedURL.hostname.toLowerCase().replace(/^www\./, "");
+  const platform = getPlatform(host);
+  const isDirectVideo = videoExtensions.test(parsedURL.pathname);
 
   try {
     const response = await fetch(API_BASE + "/api/check-link", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json"
+      },
       body: JSON.stringify({
-        url: parsed.href,
+        url: parsedURL.href,
         quality: selectedQuality
       })
     });
@@ -216,48 +287,41 @@ checkButton.addEventListener("click", async () => {
     const data = await response.json();
 
     if (!response.ok || !data.success) {
-      statusBox.textContent = "⚠️ " + (data.message || "The server could not check this link.");
-      downloadStatus.textContent = "Link check failed.";
+      statusBox.textContent = data.message || "Could not check this link.";
+      return;
+    }
+
+    if (isDirectVideo || data.type === "direct-video") {
+      statusBox.textContent =
+        "Direct video link recognized. Quality selected: " +
+        selectedQuality + ".";
+      showDirectVideo(parsedURL);
       return;
     }
 
     statusBox.textContent =
-      "✅ " + (data.message || "Link checked.") +
-      " Platform: " + (data.platform || platform || "Direct video source") + ".";
-
-    downloadStatus.textContent =
-      "Selected quality: " + selectedQuality +
-      ". " + (data.message || "Video formats are not yet available.");
-
+      "✅ Link recognized. Platform: " + (data.platform || platform || "Unknown") +
+      ". A compatible authorized video service is needed to retrieve the actual video.";
   } catch (error) {
-    statusBox.textContent =
-      "⚠️ Could not connect to the backend. Check the server and CORS settings.";
-    downloadStatus.textContent =
-      "Backend connection failed. The website is open, but the API did not respond.";
+    if (isDirectVideo) {
+      statusBox.textContent =
+        "Direct video link detected. Backend connection failed, so showing the direct video option.";
+      showDirectVideo(parsedURL);
+    } else {
+      statusBox.textContent =
+        "Could not connect to the backend. Check your internet connection or try again later.";
+    }
   } finally {
     checkButton.disabled = false;
-    checkButton.textContent = "✨ CHECK VIDEO";
-  }
-
-  if (directVideo) {
-    previewCard.style.display = "block";
-    player.src = parsed.href;
-    downloadLink.href = parsed.href;
-
-    resolution.textContent = "Loading video information...";
-
-    player.onloadedmetadata = () => {
-      resolution.textContent =
-        "Actual resolution: " + player.videoWidth + " × " + player.videoHeight;
-    };
-
-    player.onerror = () => {
-      resolution.textContent =
-        "Preview unavailable. The source may block browser playback.";
-    };
-
-    player.load();
+    checkButton.textContent = "CHECK VIDEO LINK";
   }
 });
-</script></body>
+
+window.addEventListener("beforeunload", () => {
+  if (currentObjectURL) {
+    URL.revokeObjectURL(currentObjectURL);
+  }
+});
+</script>
+</body>
 </html>
