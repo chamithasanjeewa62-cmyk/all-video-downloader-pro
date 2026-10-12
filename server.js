@@ -3,27 +3,47 @@ const express = require("express");
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-app.use(express.json());
+app.use(express.json({ limit: "10kb" }));
+
+const platforms = {
+  "facebook.com": "Facebook",
+  "fb.watch": "Facebook",
+  "tiktok.com": "TikTok",
+  "instagram.com": "Instagram",
+  "youtube.com": "YouTube",
+  "youtu.be": "YouTube",
+  "x.com": "X",
+  "twitter.com": "X",
+  "reddit.com": "Reddit"
+};
+
+function identifyPlatform(host) {
+  for (const [domain, name] of Object.entries(platforms)) {
+    if (host === domain || host.endsWith("." + domain)) {
+      return name;
+    }
+  }
+
+  return null;
+}
 
 app.get("/", (req, res) => {
   res.json({
     name: "ALL VIDEO DOWNLOADER PRO",
     status: "Backend is running",
-    platforms: [
-      "Facebook",
-      "TikTok",
-      "Instagram",
-      "YouTube",
-      "X",
-      "Reddit"
+    features: [
+      "Link validation",
+      "Platform detection",
+      "Direct video link detection",
+      "Quality selection input"
     ]
   });
 });
 
 app.post("/api/check-link", (req, res) => {
-  const { url } = req.body || {};
+  const { url, quality = "720p" } = req.body || {};
 
-  if (!url) {
+  if (typeof url !== "string" || !url.trim()) {
     return res.status(400).json({
       success: false,
       message: "Please provide a video URL."
@@ -33,7 +53,7 @@ app.post("/api/check-link", (req, res) => {
   let parsed;
 
   try {
-    parsed = new URL(url);
+    parsed = new URL(url.trim());
   } catch {
     return res.status(400).json({
       success: false,
@@ -41,45 +61,60 @@ app.post("/api/check-link", (req, res) => {
     });
   }
 
-  if (parsed.protocol !== "https:" &&
-      parsed.protocol !== "http:") {
+  if (!["http:", "https:"].includes(parsed.protocol)) {
     return res.status(400).json({
       success: false,
       message: "Only HTTP and HTTPS links are accepted."
     });
   }
 
-  const hosts = {
-    "facebook.com": "Facebook",
-    "fb.watch": "Facebook",
-    "tiktok.com": "TikTok",
-    "instagram.com": "Instagram",
-    "youtube.com": "YouTube",
-    "youtu.be": "YouTube",
-    "x.com": "X",
-    "twitter.com": "X",
-    "reddit.com": "Reddit"
-  };
+  const host = parsed.hostname.toLowerCase().replace(/^www\./, "");
+  const platform = identifyPlatform(host);
 
-  const host = parsed.hostname.toLowerCase()
-    .replace(/^www\./, "");
+  const allowedQualities = [
+    "360p",
+    "480p",
+    "720p",
+    "1080p",
+    "4K"
+  ];
 
-  const platform = Object.entries(hosts).find(
-    ([domain]) =>
-      host === domain || host.endsWith("." + domain)
-  );
-
-  if (!platform) {
-    return res.json({
+  if (!allowedQualities.includes(quality)) {
+    return res.status(400).json({
       success: false,
-      message: "Platform not supported."
+      message: "Unsupported quality selection."
     });
   }
 
-  res.json({
+  const directVideo = /\.(mp4|webm|ogv|mov)$/i.test(
+    parsed.pathname
+  );
+
+  if (directVideo) {
+    return res.json({
+      success: true,
+      type: "direct-video",
+      platform: platform || "Direct video source",
+      selectedQuality: quality,
+      message:
+        "Direct video link detected. Actual playback and downloading depend on source access."
+    });
+  }
+
+  if (!platform) {
+    return res.status(400).json({
+      success: false,
+      message: "This website is not supported."
+    });
+  }
+
+  return res.json({
     success: true,
-    platform: platform[1],
-    message: "Video link recognized. Download support must be configured separately."
+    type: "page-link",
+    platform,
+    selectedQuality: quality,
+    message:
+      "Link recognized. A compatible, authorized video service is required to retrieve video formats and download URLs."
   });
 });
 
