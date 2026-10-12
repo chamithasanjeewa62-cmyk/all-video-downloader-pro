@@ -5,6 +5,31 @@ const PORT = process.env.PORT || 3000;
 
 app.use(express.json({ limit: "10kb" }));
 
+// CORS configuration
+app.use((req, res, next) => {
+  const origin = req.headers.origin;
+
+  const allowedOrigins = [
+    "https://chamithasanjeewa62-cmyk.github.io",
+    "https://all-video-downloader-pro.vercel.app"
+  ];
+
+  if (origin && allowedOrigins.includes(origin)) {
+    res.setHeader("Access-Control-Allow-Origin", origin);
+  }
+
+  res.setHeader("Vary", "Origin");
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+
+  if (req.method === "OPTIONS") {
+    return res.sendStatus(204);
+  }
+
+  next();
+});
+
+// Supported platforms
 const platforms = {
   "facebook.com": "Facebook",
   "fb.watch": "Facebook",
@@ -17,6 +42,7 @@ const platforms = {
   "reddit.com": "Reddit"
 };
 
+// Identify platform from hostname
 function identifyPlatform(host) {
   for (const [domain, name] of Object.entries(platforms)) {
     if (host === domain || host.endsWith("." + domain)) {
@@ -27,6 +53,7 @@ function identifyPlatform(host) {
   return null;
 }
 
+// Backend status
 app.get("/", (req, res) => {
   res.json({
     name: "ALL VIDEO DOWNLOADER PRO",
@@ -35,11 +62,13 @@ app.get("/", (req, res) => {
       "Link validation",
       "Platform detection",
       "Direct video link detection",
-      "Quality selection input"
+      "Quality selection input",
+      "CORS enabled"
     ]
   });
 });
 
+// Check video link
 app.post("/api/check-link", (req, res) => {
   const { url, quality = "720p" } = req.body || {};
 
@@ -68,7 +97,10 @@ app.post("/api/check-link", (req, res) => {
     });
   }
 
-  const host = parsed.hostname.toLowerCase().replace(/^www\./, "");
+  const host = parsed.hostname
+    .toLowerCase()
+    .replace(/^www\./, "");
+
   const platform = identifyPlatform(host);
 
   const allowedQualities = [
@@ -86,6 +118,7 @@ app.post("/api/check-link", (req, res) => {
     });
   }
 
+  // Detect direct video file links
   const directVideo = /\.(mp4|webm|ogv|mov)$/i.test(
     parsed.pathname
   );
@@ -97,10 +130,11 @@ app.post("/api/check-link", (req, res) => {
       platform: platform || "Direct video source",
       selectedQuality: quality,
       message:
-        "Direct video link detected. Actual playback and downloading depend on source access."
+        "Direct video link detected. Playback and downloading depend on source access."
     });
   }
 
+  // Reject unsupported platforms
   if (!platform) {
     return res.status(400).json({
       success: false,
@@ -108,6 +142,7 @@ app.post("/api/check-link", (req, res) => {
     });
   }
 
+  // Recognized platform
   return res.json({
     success: true,
     type: "page-link",
@@ -118,6 +153,7 @@ app.post("/api/check-link", (req, res) => {
   });
 });
 
+// Start server
 app.listen(PORT, "0.0.0.0", () => {
   console.log(`Server running on port ${PORT}`);
 });
